@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DiGGER!</title>
+<style>
+body {
+    font-family: monospace;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* To prevent scrollbars */
+}
+
+#splashScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    cursor: pointer;
+}
+
+#backgroundVideo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1; /* Ensure video is behind other content */
+}
+
+#draggableWindow {
+    width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: rgba(51, 51, 51, 0.7); /* Slightly transparent */
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: move;
+    z-index: 10; /* Ensure window is above video */
+    opacity: 0;
+    transition: opacity 2s;
+    user-select: none; /* Prevent text selection */
+}
+
+#asciiText, #splashText {
+    font-family: monospace;
+    white-space: pre;
+    text-align: center;
+    user-select: none; /* Prevent text selection */
+}
+
+a {
+    color: #fff;
+    text-decoration: underline;
+    user-select: none; /* Prevent text selection */
+}
+</style>
+</head>
+<body>
+
+<video id="backgroundVideo" loop autoplay muted>
+    <source src="https://ia802309.us.archive.org/4/items/star-background/Star%20background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+
+<div id="splashScreen">
+    <div id="splashText">
+    </div>
+</div>
+
+<div id="draggableWindow">
+    <div id="asciiText">
+         _____  _             _       _     _             
+   /$$$$$$                      /$$ /$$   /$$          
+ /$$__  $$                    | $$| $$  | $$          
+| $$  \__/  /$$$$$$  /$$   /$$| $$| $$  | $$ /$$   /$$
+|  $$$$$$  /$$__  $$| $$  | $$| $$| $$$$$$$$| $$  | $$
+ \____  $$| $$  \ $$| $$  | $$| $$|_____  $$| $$  | $$
+ /$$  \ $$| $$  | $$| $$  | $$| $$      | $$| $$  | $$
+|  $$$$$$/|  $$$$$$/|  $$$$$$/| $$      | $$|  $$$$$$$
+ \______/  \______/  \______/ |__/      |__/ \____  $$
+                                             /$$  | $$
+                                            |  $$$$$$/
+                                             \______/   
+    </div>
+    <p>- Ayman Mustafa.</p>
+    <p>- Intermediate at Python and C++/C#.</p>
+    <p>- Doxbin Account - <a href="https://doxbin.org/user/Soul4y" target="_blank">https://doxbin.org/user/Soul4y</a>.</p>
+    <p>- Github Account - <a href="https://github.com/beztpro9" target="_blank">https://github.com/beztpro9</a>.</p>
+    <p>- Bitcoin - bc1qrtkpl5pefxrklzpcmqardfkdtln35l0fmtuy4j
+    <p>Software is like sex, It's better when It's Free.</p>
+    <p>- Linus Torvalds.</p>
+</div>
+
+<audio id="backgroundAudio" loop autoplay>
+    <source src="https://ia600408.us.archive.org/4/items/videoplayback-2_202406/videoplayback%20%282%29.m4a" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const splashScreen = document.getElementById('splashScreen');
+    const draggableWindow = document.getElementById('draggableWindow');
+    let isDragging = false;
+    let initialX, initialY;
+    let currentX, currentY;
+
+    splashScreen.addEventListener('click', function() {
+        splashScreen.style.display = 'none';
+        draggableWindow.style.opacity = 1;
+        document.getElementById("backgroundAudio").play();
+    });
+
+    draggableWindow.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        initialX = e.clientX - currentX;
+        initialY = e.clientY - currentY;
+    });
+
+    draggableWindow.addEventListener('mouseup', function() {
+        isDragging = false;
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (isDragging) {
+            e.preventDefault();
+            currentX = e.clientX - initialX;
+            currentY = e.clientY - initialY;
+            setTranslate(currentX, currentY, draggableWindow);
+        }
+    });
+
+    function setTranslate(xPos, yPos, el) {
+        el.style.transform = `translate(${xPos}px, ${yPos}px)`;
+    }
+
+    // Prevent F12 key
+    document.onkeydown = function (event) {
+        if (event.key === "F12" || event.code === "F12") {
+            return false;
+        }
+    };
+
+    // Prevent other key combinations
+    document.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && (
+            event.key === "r" || // Ctrl+R (refresh)
+            (event.ctrlKey && event.shiftKey && (event.key === "i" || event.code === "KeyI")) // Ctrl+Shift+I (open developer tools)
+        )) {
+            event.preventDefault();
+        }
+    });
+
+    // Prevent selection via Ctrl+A
+    document.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && (event.key === "a" || event.code === "KeyA")) {
+            event.preventDefault();
+        }
+    });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Prevent all keyboard shortcuts
+    document.addEventListener('keydown', function(event) {
+        event.preventDefault();
+    });
+
+    // Prevent right-click context menu
+    document.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+    });
+});
+</script>
+</body>
+</html>
